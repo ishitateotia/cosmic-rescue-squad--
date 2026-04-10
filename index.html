@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🚀 Cosmic Rescue Squad!</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Nunito:wght@400;700;800;900&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --space:   #03001C;
+  --deep:    #0a0a2e;
+  --panel:   rgba(255,255,255,0.04);
+  --border:  rgba(100,200,255,0.15);
+  --cyan:    #00e5ff;
+  --pink:    #ff1493;
+  --yellow:  #ffe000;
+  --green:   #00ff88;
+  --purple:  #bf00ff;
+  --orange:  #ff6600;
+  --white:   #e8f4ff;
+  --p1c:     #00e5ff;
+  --p2c:     #ff1493;
+}
+
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--space);
+  min-height:100vh;
+  overflow-x:hidden;
+  color:var(--white);
+}
+
+/* ═══════ ANIMATED SPACE BG ═══════ */
+#space-bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 15% 40%,rgba(0,229,255,0.06) 0%,transparent 55%),
+    radial-gradient(ellipse at 85% 20%,rgba(191,0,255,0.07) 0%,transparent 55%),
+    radial-gradient(ellipse at 50% 85%,rgba(255,20,147,0.05) 0%,transparent 55%),
+    var(--space);
+}
+.star-field{position:absolute;inset:0}
+.star{position:absolute;border-radius:50%;background:#fff;animation:starTwinkle ease-in-out infinite}
+@keyframes starTwinkle{
+  0%,100%{opacity:.15;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.6)}
+}
+.nebula{
+  position:absolute;border-radius:50%;filter:blur(60px);
+  animation:nebulaPulse ease-in-out infinite;pointer-events:none;
+}
+@keyframes nebulaPulse{
+  0%,100%{opacity:.3;transform:scale(1)}
+  50%{opacity:.6;transform:scale(1.1)}
+}
+
+/* ═══════ SCREENS ═══════ */
+.screen{display:none;min-height:100vh;flex-direction:column}
+.screen.active{display:flex}
+
+/* ═══════════════════════════════════
+   START SCREEN
+═══════════════════════════════════ */
+#screen-start{
+  align-items:center;justify-content:center;
+  padding:1.5rem;position:relative;
+}
+
+.start-inner{
+  position:relative;z-index:2;
+  text-align:center;max-width:520px;width:100%;
+}
+
+/* Rotating planet */
+.planet-hero{
+  width:100px;height:100px;margin:0 auto 0.8rem;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#7b2fff,#0d0050);
+  box-shadow:
+    0 0 30px rgba(123,47,255,0.7),
+    0 0 60px rgba(123,47,255,0.3),
+    inset -15px -10px 30px rgba(0,0,0,0.6);
+  animation:planetSpin 8s linear infinite,planetGlow 3s ease-in-out infinite;
+  position:relative;overflow:hidden;
+}
+.planet-hero::before{
+  content:'';position:absolute;
+  width:200%;height:30px;
+  background:rgba(255,255,255,0.08);
+  top:35%;left:-50%;
+  transform:rotate(-20deg);
+}
+.planet-hero::after{
+  content:'🚀';font-size:1.8rem;
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  animation:rocketOrbit 4s linear infinite;
+}
+@keyframes planetSpin{from{filter:hue-rotate(0deg)}to{filter:hue-rotate(360deg)}}
+@keyframes planetGlow{
+  0%,100%{box-shadow:0 0 30px rgba(123,47,255,.7),0 0 60px rgba(123,47,255,.3)}
+  50%    {box-shadow:0 0 50px rgba(0,229,255,.9),0 0 100px rgba(0,229,255,.4)}
+}
+@keyframes rocketOrbit{
+  from{transform:rotate(0deg) translateX(50px) rotate(0deg)}
+  to  {transform:rotate(360deg) translateX(50px) rotate(-360deg)}
+}
+
+.game-title{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(1.8rem,7vw,3.2rem);
+  font-weight:900;
+  line-height:1.1;
+  letter-spacing:0.06em;
+  background:linear-gradient(135deg,#00e5ff,#bf00ff,#ff1493,#ffe000);
+  background-size:300% 300%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:titleShimmer 4s ease infinite;
+  margin:0.5rem 0 0.2rem;
+}
+@keyframes titleShimmer{
+  0%,100%{background-position:0% 50%}
+  50%    {background-position:100% 50%}
+}
+
+.title-glow{
+  font-size:.9rem;color:rgba(0,229,255,.7);
+  font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;margin-bottom:1.2rem;
+}
+
+/* Crew preview */
+.crew-grid{
+  display:flex;justify-content:center;gap:.5rem;
+  flex-wrap:wrap;margin:1rem 0;
+}
+.crew-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(100,200,255,.15);
+  border-radius:12px;padding:.45rem .7rem;
+  text-align:center;transition:all .2s;cursor:default;
+}
+.crew-card:hover{
+  border-color:var(--cyan);
+  background:rgba(0,229,255,.08);
+  transform:translateY(-4px) scale(1.05);
+  box-shadow:0 8px 20px rgba(0,229,255,.2);
+}
+.cc-icon{font-size:1.4rem;display:block;animation:iconFloat 2s ease-in-out infinite}
+.cc-name{font-size:.65rem;color:#aaa;font-weight:700;margin-top:2px}
+@keyframes iconFloat{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-5px)}
+}
+
+/* Buttons */
+.start-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin:1.2rem 0}
+
+.btn-launch{
+  font-family:'Orbitron',monospace;
+  font-size:1rem;font-weight:700;
+  padding:.75rem 1.8rem;border:none;
+  border-radius:6px;cursor:pointer;
+  letter-spacing:.1em;text-transform:uppercase;
+  position:relative;overflow:hidden;
+  transition:transform .15s,box-shadow .15s;
+  clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+}
+.btn-launch::before{
+  content:'';position:absolute;inset:0;
+  background:rgba(255,255,255,.15);opacity:0;
+  transition:opacity .15s;
+}
+.btn-launch:hover::before{opacity:1}
+.btn-launch:hover{transform:translateY(-4px) scale(1.03);box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.btn-launch:active{transform:scale(.96)}
+.b1{background:linear-gradient(135deg,#0066ff,#00e5ff);color:#fff}
+.b2{background:linear-gradient(135deg,#8800cc,#ff1493);color:#fff}
+
+.rules-panel{
+  background:rgba(0,0,0,.4);
+  border:1px solid var(--border);
+  border-radius:16px;padding:1rem 1.3rem;
+  text-align:left;
+}
+.rules-panel h3{
+  font-family:'Orbitron',monospace;
+  font-size:.78rem;color:var(--cyan);
+  letter-spacing:.15em;margin-bottom:.7rem;text-align:center;
+}
+.rules-panel li{
+  list-style:none;font-size:.82rem;
+  color:#bbb;padding:.22rem 0;font-weight:600;
+}
+
+/* ═══════════════════════════════════
+   GAME SCREEN
+═══════════════════════════════════ */
+#screen-game{background:var(--space)}
+
+/* HUD */
+.hud{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.55rem 1rem;
+  background:rgba(0,0,0,.7);
+  border-bottom:1px solid var(--border);
+  gap:.5rem;position:relative;z-index:20;
+}
+
+.commander{
+  display:flex;flex-direction:column;align-items:center;
+  background:var(--panel);
+  border:1.5px solid rgba(255,255,255,.08);
+  border-radius:12px;padding:.35rem .9rem;
+  min-width:100px;transition:all .3s;
+}
+.commander.active{
+  border-color:var(--cyan);
+  background:rgba(0,229,255,.08);
+  box-shadow:0 0 20px rgba(0,229,255,.2),inset 0 0 15px rgba(0,229,255,.05);
+}
+#cmd1.active{border-color:var(--p1c);box-shadow:0 0 20px rgba(0,229,255,.25)}
+#cmd2.active{border-color:var(--p2c);box-shadow:0 0 20px rgba(255,20,147,.25)}
+
+.cmd-name{font-size:.62rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#555;font-family:'Orbitron',monospace}
+.cmd-score{font-family:'Orbitron',monospace;font-size:1.6rem;color:var(--yellow);line-height:1}
+.cmd-res{font-size:.6rem;color:#444}
+#cmd1 .cmd-name{color:var(--p1c)}
+#cmd2 .cmd-name{color:var(--p2c)}
+
+.hud-center{flex:1;text-align:center}
+#turn-txt{font-family:'Orbitron',monospace;font-size:.9rem;color:var(--cyan);letter-spacing:.06em}
+#turn-sub{font-size:.62rem;color:#444;margin-top:2px}
+
+/* MISSION BAR */
+.mission-bar{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.4rem 1rem;
+  background:rgba(0,0,0,.5);
+  border-bottom:1px solid rgba(0,229,255,.08);
+  overflow-x:auto;position:relative;z-index:20;
+}
+.mb-label{
+  font-size:.6rem;color:var(--cyan);font-weight:900;
+  white-space:nowrap;text-transform:uppercase;
+  letter-spacing:.1em;font-family:'Orbitron',monospace;
+}
+.mb-chips{display:flex;gap:.3rem;align-items:center}
+.mb-chip{
+  display:flex;align-items:center;gap:3px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:20px;padding:3px 9px;
+  font-size:.67rem;font-weight:700;color:#aaa;
+  white-space:nowrap;transition:all .4s;
+}
+.mb-chip.rescued{
+  background:rgba(0,255,136,.15);
+  border-color:var(--green);color:var(--green);
+}
+.mb-num{font-family:'Orbitron',monospace;font-size:.72rem;color:var(--yellow)}
+
+/* ACTIONS */
+.actions{
+  display:flex;gap:.5rem;padding:.5rem 1rem;
+  justify-content:center;flex-wrap:wrap;
+  background:rgba(0,0,0,.4);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  position:relative;z-index:20;
+}
+
+.a-btn{
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  padding:.45rem 1rem;
+  border:1.5px solid rgba(255,255,255,.1);
+  border-radius:8px;
+  background:rgba(255,255,255,.03);
+  color:#888;cursor:pointer;
+  transition:all .15s;min-width:88px;
+  clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+  font-family:'Nunito',sans-serif;
+}
+.a-btn:hover{border-color:var(--cyan);background:rgba(0,229,255,.07);transform:translateY(-3px);color:#fff}
+.a-btn.on{border-color:var(--orange);background:rgba(255,102,0,.12);color:#fff;box-shadow:0 0 18px rgba(255,102,0,.3)}
+.a-btn.x:hover{border-color:var(--pink);background:rgba(255,20,147,.08)}
+.ai{font-size:1.2rem}
+.an{font-size:.58rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;font-family:'Orbitron',monospace}
+.ad{font-size:.55rem;color:#555;text-align:center;line-height:1.3}
+
+/* COUNT ROW */
+.count-row{
+  display:flex;align-items:center;gap:.5rem;
+  padding:.38rem 1rem;justify-content:center;
+  background:rgba(0,229,255,.03);
+  border-bottom:1px solid rgba(0,229,255,.1);
+  position:relative;z-index:20;
+}
+.cr-lbl{font-size:.75rem;color:var(--cyan);font-weight:700;font-family:'Orbitron',monospace}
+.cr-btn{
+  width:36px;height:36px;border-radius:50%;
+  border:1.5px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);color:#fff;
+  font-family:'Orbitron',monospace;font-size:.9rem;
+  cursor:pointer;transition:all .15s;
+}
+.cr-btn:hover{background:var(--orange);border-color:var(--orange);transform:scale(1.15)}
+.cr-btn.sel{background:var(--orange);border-color:var(--orange);box-shadow:0 0 14px rgba(255,102,0,.5)}
+.cr-btn:disabled{opacity:.15;cursor:not-allowed;transform:none}
+
+/* REORDER PANEL */
+.reorder-wrap{
+  display:flex;flex-direction:column;align-items:center;gap:.6rem;
+  padding:.55rem 1rem;
+  background:rgba(191,0,255,.08);
+  border-bottom:1px solid rgba(191,0,255,.35);
+  position:relative;z-index:20;
+}
+.rw-title{font-size:.75rem;color:#da8fff;font-weight:700;font-family:'Orbitron',monospace;letter-spacing:.05em}
+.rw-row{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;align-items:center}
+
+.rw-chip{
+  display:flex;align-items:center;gap:5px;
+  padding:.32rem .85rem;border-radius:6px;
+  font-size:.8rem;font-weight:800;
+  cursor:grab;border:1.5px solid transparent;
+  transition:all .15s;user-select:none;
+  clip-path:polygon(5px 0%,100% 0%,calc(100% - 5px) 100%,0% 100%);
+}
+.rw-chip:active{cursor:grabbing}
+.rw-chip.dov{border-color:var(--yellow);transform:scale(1.08);box-shadow:0 0 12px rgba(255,224,0,.4)}
+
+.sw-btn{
+  background:none;border:none;color:var(--yellow);
+  font-size:1.1rem;cursor:pointer;padding:0 2px;
+  transition:transform .15s;
+}
+.sw-btn:hover{transform:scale(1.4)}
+
+.btn-confirm{
+  font-family:'Orbitron',monospace;font-size:.82rem;font-weight:700;
+  padding:.4rem 1.5rem;
+  background:linear-gradient(135deg,#006633,#00cc66);
+  color:#cfffdf;border:1px solid var(--green);
+  border-radius:6px;cursor:pointer;letter-spacing:.08em;
+  clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+  transition:transform .15s,box-shadow .15s;
+}
+.btn-confirm:hover{transform:scale(1.06);box-shadow:0 4px 20px rgba(0,255,136,.35)}
+
+/* ════════ BOARD ════════ */
+.board-wrap{
+  flex:1;overflow-x:auto;
+  padding:1rem .8rem .5rem;
+  display:flex;align-items:flex-end;
+  position:relative;z-index:5;
+}
+
+/* Warp line under board */
+.board-wrap::before{
+  content:'';position:absolute;
+  bottom:30px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  opacity:.2;pointer-events:none;
+}
+
+.board{
+  display:flex;align-items:flex-end;gap:10px;
+  min-width:max-content;margin:0 auto;padding-bottom:4px;
+}
+
+/* SLOT */
+.sw{display:flex;flex-direction:column;align-items:center;gap:5px}
+
+.sn{
+  font-size:.55rem;font-weight:700;color:#333;
+  text-align:center;line-height:1.2;max-width:70px;
+  font-family:'Orbitron',monospace;letter-spacing:.02em;
+}
+
+.sc{
+  width:70px;min-height:75px;
+  border-radius:8px;
+  border:1.5px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.025);
+  display:flex;flex-direction:column-reverse;
+  align-items:center;padding:5px 4px;gap:3px;
+  cursor:pointer;transition:all .2s;position:relative;
+  overflow:hidden;
+  clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%);
+}
+
+/* Scan-line effect on slots */
+.sc::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(
+    0deg,transparent,transparent 4px,rgba(0,229,255,.015) 4px,rgba(0,229,255,.015) 5px
+  );pointer-events:none;
+}
+
+.sc.ss{border-color:rgba(0,229,255,.25);background:rgba(0,229,255,.04)}
+.sc.fs{
+  border-color:rgba(0,255,136,.5);
+  background:rgba(0,255,136,.05);
+  box-shadow:0 0 25px rgba(0,255,136,.12);
+}
+.sc.pick{
+  border-color:var(--yellow);
+  background:rgba(255,224,0,.06);
+  animation:slotBeam 1s ease-in-out infinite;
+}
+@keyframes slotBeam{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,224,0,.5),inset 0 0 10px rgba(255,224,0,.05)}
+  50%    {box-shadow:0 0 0 10px rgba(255,224,0,0),inset 0 0 20px rgba(255,224,0,.1)}
+}
+
+.sc-deco{
+  position:absolute;bottom:3px;right:4px;
+  font-size:1.2rem;opacity:.12;pointer-events:none;
+}
+.sc-cnt{
+  position:absolute;top:3px;right:5px;
+  font-size:.54rem;color:rgba(255,255,255,.25);font-weight:900;
+  font-family:'Orbitron',monospace;
+}
+
+/* CREW TOKENS */
+.cc{
+  width:60px;height:30px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  gap:3px;font-size:.65rem;font-weight:800;
+  border:1.5px solid transparent;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),box-shadow .2s;
+  white-space:nowrap;overflow:hidden;letter-spacing:.02em;
+  position:relative;
+  clip-path:polygon(4px 0%,100% 0%,calc(100% - 4px) 100%,0% 100%);
+}
+.cc::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.15) 0%,transparent 50%);
+  pointer-events:none;
+}
+.cc.top{
+  box-shadow:0 0 14px rgba(255,255,255,.3);
+  border-color:rgba(255,255,255,.5);
+  transform:scale(1.06);
+}
+
+/* Crew color theme — each one unique & vibrant */
+.c0{background:linear-gradient(135deg,#001a4d,#0044cc);color:#66aaff} /* Astronaut */
+.c1{background:linear-gradient(135deg,#4d0000,#cc0022);color:#ff8888} /* Medic     */
+.c2{background:linear-gradient(135deg,#004d00,#00aa44);color:#88ffaa} /* Pilot     */
+.c3{background:linear-gradient(135deg,#4d3300,#cc8800);color:#ffcc66} /* Engineer  */
+.c4{background:linear-gradient(135deg,#2d004d,#7700cc);color:#dd88ff} /* Scientist */
+.c5{background:linear-gradient(135deg,#004d4d,#00aaaa);color:#66ffff} /* Navigator */
+.c6{background:linear-gradient(135deg,#4d0033,#cc0077);color:#ff77cc} /* Captain   */
+
+/* ENTRY ANIMATION */
+@keyframes warpIn{
+  0%  {transform:scaleX(0) translateX(-20px);opacity:0}
+  60% {transform:scaleX(1.1);opacity:1}
+  100%{transform:scaleX(1);opacity:1}
+}
+.warp-in{animation:warpIn .4s cubic-bezier(.34,1.56,.64,1) forwards}
+
+/* ─── VFX ─── */
+/* Score pop */
+.spop{
+  position:fixed;pointer-events:none;z-index:9999;
+  font-family:'Orbitron',monospace;font-size:1.5rem;font-weight:900;
+  color:var(--yellow);
+  text-shadow:0 0 20px rgba(255,224,0,.9),0 0 40px rgba(255,224,0,.5);
+  animation:spopRise 1.4s ease-out forwards;
+}
+@keyframes spopRise{
+  0%  {transform:translateY(0) scale(.7);opacity:1}
+  100%{transform:translateY(-110px) scale(1.6);opacity:0}
+}
+
+/* Laser beam */
+.laser{
+  position:fixed;pointer-events:none;z-index:9998;
+  height:2px;border-radius:2px;
+  animation:laserFade .5s ease-out forwards;
+  transform-origin:left center;
+}
+@keyframes laserFade{
+  0%  {transform:scaleX(0);opacity:1}
+  60% {transform:scaleX(1);opacity:1}
+  100%{transform:scaleX(1);opacity:0}
+}
+
+/* Screen flash */
+.flash{
+  position:fixed;inset:0;pointer-events:none;z-index:8888;
+  animation:flashOut .5s ease-out forwards;
+}
+@keyframes flashOut{0%{opacity:1}100%{opacity:0}}
+
+/* Warp ring */
+.wring{
+  position:fixed;pointer-events:none;z-index:8887;
+  border-radius:50%;border:2px solid var(--cyan);
+  animation:wRing .8s ease-out forwards;
+}
+@keyframes wRing{
+  0%  {transform:scale(0);opacity:1}
+  100%{transform:scale(5);opacity:0}
+}
+
+/* Particle burst */
+.prt{
+  position:fixed;pointer-events:none;z-index:9997;
+  border-radius:50%;
+  animation:prtFly ease-out forwards;
+}
+@keyframes prtFly{
+  0%  {transform:translate(0,0) scale(1);opacity:1}
+  100%{opacity:0}
+}
+
+/* Confetti */
+.conf{
+  position:fixed;pointer-events:none;z-index:9996;
+  animation:confDrop linear forwards;
+}
+@keyframes confDrop{
+  0%  {transform:translateY(-30px) rotate(0deg);opacity:1}
+  100%{transform:translateY(110vh) rotate(900deg);opacity:0}
+}
+
+/* Mission log */
+.log{
+  padding:.38rem 1.2rem;
+  background:rgba(0,0,0,.7);
+  border-top:1px solid rgba(0,229,255,.08);
+  font-size:.73rem;color:var(--cyan);
+  text-align:center;font-weight:700;
+  min-height:30px;font-family:'Orbitron',monospace;
+  letter-spacing:.04em;position:relative;z-index:20;
+}
+
+/* ═══════════════════════════════════
+   END SCREEN
+═══════════════════════════════════ */
+#screen-end{
+  background:radial-gradient(ellipse at 50% 30%,rgba(0,100,255,.15) 0%,var(--space) 70%);
+  align-items:center;justify-content:center;padding:2rem;
+}
+
+.end-card{
+  background:rgba(255,255,255,.03);
+  border:2px solid rgba(0,229,255,.25);
+  border-radius:20px;padding:2.5rem 2rem;
+  max-width:440px;width:100%;text-align:center;
+  backdrop-filter:blur(12px);position:relative;z-index:2;
+  clip-path:polygon(16px 0%,100% 0%,calc(100% - 16px) 100%,0% 100%);
+}
+
+.end-ico{font-size:5rem;display:block;animation:iconFloat 2s ease-in-out infinite}
+.end-title{
+  font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:900;
+  background:linear-gradient(135deg,#00e5ff,#bf00ff,#ff1493);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin:.4rem 0;letter-spacing:.08em;
+}
+.end-sub{color:rgba(0,229,255,.6);font-size:.85rem;font-weight:700;font-family:'Orbitron',monospace}
+
+.score-row{display:flex;gap:1rem;justify-content:center;margin:1.2rem 0;flex-wrap:wrap}
+.sc-box{
+  background:rgba(255,255,255,.04);
+  border:1.5px solid rgba(255,255,255,.1);
+  border-radius:12px;padding:.9rem 1.4rem;min-width:130px;
+  clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+}
+.sc-box.w{border-color:var(--yellow);background:rgba(255,224,0,.07)}
+.sbn{font-size:.62rem;font-weight:900;text-transform:uppercase;letter-spacing:.1em;color:#444;font-family:'Orbitron',monospace}
+.sbp{font-family:'Orbitron',monospace;font-size:2.2rem;color:var(--yellow);line-height:1}
+.sbd{font-size:.64rem;color:#444;margin-top:3px}
+
+.end-btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+
+/* ═ RESPONSIVE ═ */
+@media(max-width:480px){
+  .sc{width:60px}.cc{width:52px;font-size:.6rem}
+  .game-title{font-size:1.6rem}
+}
+</style>
+</head>
+<body>
+
+<div id="space-bg">
+  <div class="star-field" id="stars"></div>
+</div>
+
+<!-- ══════════════ START ══════════════ -->
+<div id="screen-start" class="screen active">
+<div class="start-inner">
+
+  <div class="planet-hero"></div>
+
+  <div class="game-title">COSMIC<br>RESCUE SQUAD</div>
+  <div class="title-glow">★ SAVE THE UNIVERSE ★</div>
+
+  <div class="crew-grid">
+    <div class="crew-card"><span class="cc-icon">👨‍🚀</span><span class="cc-name">ASTRO</span></div>
+    <div class="crew-card"><span class="cc-icon">👩‍⚕️</span><span class="cc-name">MEDIC</span></div>
+    <div class="crew-card"><span class="cc-icon">🧑‍✈️</span><span class="cc-name">PILOT</span></div>
+    <div class="crew-card"><span class="cc-icon">🧑‍🔧</span><span class="cc-name">ENGI</span></div>
+    <div class="crew-card"><span class="cc-icon">🧑‍🔬</span><span class="cc-name">SCI</span></div>
+    <div class="crew-card"><span class="cc-icon">🧭</span><span class="cc-name">NAV</span></div>
+    <div class="crew-card"><span class="cc-icon">👩‍✈️</span><span class="cc-name">CAP</span></div>
+  </div>
+
+  <div class="start-btns">
+    <button class="btn-launch b1" onclick="startGame(1)">🤖 vs AI</button>
+    <button class="btn-launch b2" onclick="startGame(2)">👥 2 Players</button>
+  </div>
+
+  <div class="rules-panel">
+    <h3>📡 MISSION BRIEFING</h3>
+    <ul>
+      <li>🚀 7 crew members are stacked at the Launch Pad</li>
+      <li>➡️ LAUNCH: Beam top 1–3 crew one sector forward</li>
+      <li>🔄 REORDER: Rearrange top 2–3 crew positions</li>
+      <li>🛸 Crew reaching the Space Station earn points!</li>
+      <li>⭐ Right arrival order = up to +35 BONUS POINTS!</li>
+      <li>🏆 Commander with most points wins the galaxy!</li>
+    </ul>
+  </div>
+
+</div>
+</div>
+
+<!-- ══════════════ GAME ══════════════ -->
+<div id="screen-game" class="screen">
+
+  <div class="hud">
+    <div class="commander" id="cmd1">
+      <span class="cmd-name" id="p1n">CMD A</span>
+      <span class="cmd-score" id="p1s">0</span>
+      <span class="cmd-res" id="p1d">0/7 rescued</span>
+    </div>
+    <div class="hud-center">
+      <div id="turn-txt">CMD A TURN</div>
+      <div id="turn-sub">Mission 1 / 50</div>
+    </div>
+    <div class="commander" id="cmd2">
+      <span class="cmd-name" id="p2n">CMD B</span>
+      <span class="cmd-score" id="p2s">0</span>
+      <span class="cmd-res" id="p2d">0/7 rescued</span>
+    </div>
+  </div>
+
+  <div class="mission-bar">
+    <span class="mb-label">📡 RESCUE ORDER:</span>
+    <div class="mb-chips" id="mb-chips"></div>
+  </div>
+
+  <div class="actions">
+    <button class="a-btn" id="btn-launch" onclick="pickAction('move')">
+      <span class="ai">🚀</span>
+      <span class="an">LAUNCH</span>
+      <span class="ad">Beam top 1–3<br>one sector fwd</span>
+    </button>
+    <button class="a-btn" id="btn-reorder" onclick="pickAction('reorder')">
+      <span class="ai">🔄</span>
+      <span class="an">REORDER</span>
+      <span class="ad">Rearrange top<br>2–3 crew</span>
+    </button>
+    <button class="a-btn x" id="btn-cancel" onclick="cancelAction()" style="display:none">
+      <span class="ai">⛔</span>
+      <span class="an">ABORT</span>
+      <span class="ad">Cancel mission</span>
+    </button>
+  </div>
+
+  <div class="count-row" id="count-row" style="display:none">
+    <span class="cr-lbl">BEAM HOW MANY?</span>
+    <button class="cr-btn" id="cr1" onclick="pickCount(1)">1</button>
+    <button class="cr-btn" id="cr2" onclick="pickCount(2)">2</button>
+    <button class="cr-btn" id="cr3" onclick="pickCount(3)">3</button>
+  </div>
+
+  <div class="reorder-wrap" id="reorder-wrap" style="display:none">
+    <div class="rw-title">⚡ DRAG OR TAP ⬅ TO REARRANGE — THEN CONFIRM</div>
+    <div class="rw-row" id="rw-row"></div>
+    <button class="btn-confirm" onclick="confirmReorder()">✅ LOCK IN ORDER</button>
+  </div>
+
+  <div class="board-wrap">
+    <div class="board" id="board"></div>
+  </div>
+
+  <div class="log" id="log">📡 COSMIC RESCUE SQUAD READY. LAUNCH OR REORDER?</div>
+</div>
+
+<!-- ══════════════ END ══════════════ -->
+<div id="screen-end" class="screen">
+  <div class="end-card">
+    <span class="end-ico" id="end-ico">🏆</span>
+    <div class="end-title" id="end-ttl">CMD A WINS!</div>
+    <div class="end-sub"   id="end-sub">GALAXY SAVED</div>
+    <div class="score-row" id="score-row"></div>
+    <div class="end-btns">
+      <button class="btn-launch b1" onclick="restartGame()">🔄 REMATCH</button>
+      <button class="btn-launch b2" onclick="goHome()">🏠 MENU</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ ENGINE ══════════════════ -->
+<script>
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  COSMIC RESCUE SQUAD
+//  Board2Code Hackathon 2026 | LPU Phagwara
+//  Pure Vanilla JS — no external libraries
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+const CFG = { SLOTS:10, TURNS:50, AI_MS:950 };
+
+const CREW = [
+  {id:0,name:"Astro", emoji:"👨‍🚀",cls:"c0"},
+  {id:1,name:"Medic", emoji:"👩‍⚕️",cls:"c1"},
+  {id:2,name:"Pilot", emoji:"🧑‍✈️",cls:"c2"},
+  {id:3,name:"Engi",  emoji:"🧑‍🔧",cls:"c3"},
+  {id:4,name:"Sci",   emoji:"🧑‍🔬",cls:"c4"},
+  {id:5,name:"Nav",   emoji:"🧭",  cls:"c5"},
+  {id:6,name:"Cap",   emoji:"👩‍✈️",cls:"c6"},
+];
+
+// Ideal rescue order for bonus scoring
+const IDEAL = [0,1,2,3,4,5,6];
+
+const SECTORS = [
+  "🚀 LAUNCH","☄️ ORBIT","🌑 MOON","🔴 MARS","💫 BELT",
+  "🪐 SATURN","🌌 NEBULA","⭐ PULSAR","🌀 WARP","🛸 STATION"
+];
+
+function pts(rank){ return Math.max(5, 75-(rank-1)*10); }
+
+// ── STATE ──
+let G={};
+
+function init(mode){
+  G={
+    mode,
+    board:Array.from({length:CFG.SLOTS},()=>[]),
+    players:[
+      {name:"CMD A",score:0,color:"p1",rescued:[]},
+      {name:mode===2?"CMD B":"AI CMD",score:0,color:"p2",rescued:[]},
+    ],
+    cur:0,turn:0,
+    phase:"action",action:null,count:null,slot:null,
+    rework:[],arrN:0,over:false,
+  };
+  // Build 14 tokens (7 crew × 2 players)
+  const pool=[];
+  CREW.forEach(c=>{
+    pool.push({...c,uid:"A"+c.id,owner:"p1",arrived:false,rank:null});
+    pool.push({...c,uid:"B"+c.id,owner:"p2",arrived:false,rank:null});
+  });
+  // Shuffle
+  for(let i=pool.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [pool[i],pool[j]]=[pool[j],pool[i]];
+  }
+  // ✅ LOCKED RULE: all tokens start in one stack at slot 0
+  G.board[0]=pool;
+}
+
+// ── UTIL ──
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");}
+function goHome(){show("screen-start");}
+function restartGame(){startGame(G.mode);}
+function setLog(m){$("log").textContent=m;}
+
+// ── LAUNCH ──
+function startGame(mode){
+  init(mode);
+  show("screen-game");
+  buildMissionBar();
+  renderAll();
+  setLog("📡 "+G.players[0].name+" COMMANDS FIRST MOVE");
+}
+
+function buildMissionBar(){
+  $("mb-chips").innerHTML=IDEAL.map((id,i)=>{
+    const c=CREW[id];
+    return `<div class="mb-chip" id="mc${i}"><span class="mb-num">${i+1}</span>${c.emoji}${c.name}</div>`;
+  }).join('<span style="color:#222;font-size:.8rem">›</span>');
+}
+
+// ── RENDER ──
+function renderAll(){renderHUD();renderBoard();}
+
+function renderHUD(){
+  const p=G.players,cp=p[G.cur];
+  $("p1n").textContent=p[0].name; $("p2n").textContent=p[1].name;
+  $("p1s").textContent=p[0].score; $("p2s").textContent=p[1].score;
+  $("p1d").textContent=p[0].rescued.length+"/7 rescued";
+  $("p2d").textContent=p[1].rescued.length+"/7 rescued";
+  $("turn-txt").textContent=(G.mode===1&&G.cur===1)?"🤖 AI COMPUTING…":cp.name+" TURN";
+  $("turn-sub").textContent="Mission "+(G.turn+1)+" / "+CFG.TURNS;
+  $("cmd1").classList.toggle("active",G.cur===0);
+  $("cmd2").classList.toggle("active",G.cur===1);
+}
+
+function renderBoard(){
+  const b=$("board");b.innerHTML="";
+  for(let s=0;s<CFG.SLOTS;s++){
+    const stack=G.board[s];
+    const isF=s===CFG.SLOTS-1,isS=s===0;
+
+    const wrap=document.createElement("div");wrap.className="sw";
+    const lbl=document.createElement("div");lbl.className="sn";lbl.textContent=SECTORS[s];
+    wrap.appendChild(lbl);
+
+    const cell=document.createElement("div");
+    cell.className="sc"+(isS?" ss":"")+(isF?" fs":"");
+    cell.dataset.slot=s;
+
+    if(G.phase==="slot"&&canPick(s)){
+      cell.classList.add("pick");
+      cell.onclick=()=>slotChosen(s);
+    }
+
+    const deco=document.createElement("div");deco.className="sc-deco";
+    deco.textContent=isF?"🛸":isS?"🚀":"";
+    cell.appendChild(deco);
+
+    if(stack.length>1){
+      const cnt=document.createElement("div");cnt.className="sc-cnt";
+      cnt.textContent="×"+stack.length;cell.appendChild(cnt);
+    }
+
+    const topN=G.count||3;
+    stack.forEach((tok,idx)=>{
+      const isTop=idx>=stack.length-topN;
+      const chip=document.createElement("div");
+      chip.className=`cc ${tok.cls}`+(isTop?" top":"");
+      chip.innerHTML=tok.emoji+'<span style="font-size:.6rem">'+tok.name+'</span>';
+      chip.title=tok.name+" ["+(tok.owner==="p1"?G.players[0].name:G.players[1].name)+"]";
+      cell.appendChild(chip);
+    });
+
+    wrap.appendChild(cell);
+    b.appendChild(wrap);
+  }
+}
+
+// ── ACTIONS ──
+function pickAction(type){
+  if(G.over||(G.mode===1&&G.cur===1))return;
+  G.action=type;G.phase="count";
+  $("btn-launch").classList.toggle("on",type==="move");
+  $("btn-reorder").classList.toggle("on",type==="reorder");
+  $("btn-cancel").style.display="flex";
+  $("count-row").style.display="flex";
+  $("cr1").disabled=(type==="reorder");
+  setLog(type==="move"?"SELECT HOW MANY CREW TO BEAM (1, 2 OR 3)":"SELECT HOW MANY CREW TO REORDER (2 OR 3)");
+}
+
+function pickCount(n){
+  if(G.action==="reorder"&&n===1)return;
+  G.count=n;G.phase="slot";
+  $("count-row").style.display="none";
+  ["cr1","cr2","cr3"].forEach((id,i)=>$(id).classList.toggle("sel",i+1===n));
+  setLog("⬇️ TAP A SECTOR ON THE BOARD TO SELECT");
+  renderBoard();
+}
+
+function cancelAction(){
+  G.phase="action";G.action=null;G.count=null;G.slot=null;
+  $("btn-launch").classList.remove("on");
+  $("btn-reorder").classList.remove("on");
+  $("btn-cancel").style.display="none";
+  $("count-row").style.display="none";
+  $("reorder-wrap").style.display="none";
+  setLog("MISSION ABORTED. LAUNCH OR REORDER?");
+  renderBoard();
+}
+
+function canPick(s){
+  if(G.phase!=="slot")return false;
+  if(G.board[s].length<G.count)return false;
+  if(G.action==="move"&&s===CFG.SLOTS-1)return false;
+  return true;
+}
+
+function slotChosen(s){
+  if(!canPick(s))return;
+  G.slot=s;
+  G.action==="move"?doLaunch(s,G.count):openReorder(s,G.count);
+}
+
+// ── LAUNCH (MOVE) ──
+function doLaunch(from,count,ai=false){
+  const to=from+1;
+  if(to>=CFG.SLOTS){setLog("⚠️ ALREADY AT STATION!");return;}
+  if(G.board[from].length<count)return;
+
+  // ✅ LOCKED RULE: top `count` tokens move forward, order preserved
+  const moved=G.board[from].splice(G.board[from].length-count,count);
+  G.board[to].push(...moved);
+
+  spawnLaser(from,to);
+
+  let earned=0,msgs=[];
+  if(to===CFG.SLOTS-1){
+    moved.forEach(tok=>{
+      if(!tok.arrived){
+        tok.arrived=true;G.arrN++;tok.rank=G.arrN;
+        const base=pts(G.arrN);
+        const bonus=calcBonus(tok);
+        const total=base+bonus;
+        G.players.find(p=>p.color===tok.owner).score+=total;
+        G.players.find(p=>p.color===tok.owner).rescued.push(tok);
+        earned+=total;
+        msgs.push(tok.emoji+" +"+total+(bonus?" ⭐+"+bonus:""));
+        markMission(tok);
+      }
+    });
+  }
+
+  const who=ai?"🤖 AI":G.players[G.cur].name;
+  setLog("🚀 "+who+" BEAMED "+count+" CREW!"+(msgs.length?" "+msgs.join(" "):""));
+
+  if(earned>0){
+    spawnScorePop("+"+earned);
+    spawnBurst();
+    spawnFlash("rgba(0,229,255,0.1)");
+    spawnWarpRing();
+  }
+  endTurn();
+}
+
+function calcBonus(tok){
+  const owner=G.players.find(p=>p.color===tok.owner);
+  const soFar=owner.rescued.length;
+  const ideal=IDEAL.indexOf(tok.id);
+  if(ideal===soFar)return 35;
+  if(Math.abs(ideal-soFar)===1)return 15;
+  return 0;
+}
+
+function markMission(tok){
+  const pos=IDEAL.indexOf(tok.id);
+  const el=$("mc"+pos);
+  if(el)el.classList.add("rescued");
+}
+
+// ── REORDER ──
+function openReorder(slot,count){
+  G.rework=[...G.board[slot].slice(G.board[slot].length-count)];
+  $("reorder-wrap").style.display="flex";
+  renderReorderUI();
+  setLog("DRAG OR TAP ⬅ TO REARRANGE CREW ORDER");
+}
+
+function renderReorderUI(){
+  const c=$("rw-row");c.innerHTML="";
+  G.rework.forEach((tok,idx)=>{
+    if(idx>0){
+      const sw=document.createElement("button");
+      sw.className="sw-btn";sw.textContent="⬅";
+      sw.onclick=()=>{
+        [G.rework[idx],G.rework[idx-1]]=[G.rework[idx-1],G.rework[idx]];
+        renderReorderUI();
+      };
+      c.appendChild(sw);
+    }
+    const chip=document.createElement("div");
+    chip.className=`rw-chip ${tok.cls}`;
+    chip.draggable=true;chip.dataset.i=idx;
+    chip.innerHTML=tok.emoji+" "+tok.name;
+    chip.addEventListener("dragstart",e=>{e.dataTransfer.setData("text/plain",idx);chip.style.opacity=".5";});
+    chip.addEventListener("dragend",()=>{chip.style.opacity="1";});
+    chip.addEventListener("dragover",e=>{e.preventDefault();chip.classList.add("dov");});
+    chip.addEventListener("dragleave",()=>chip.classList.remove("dov"));
+    chip.addEventListener("drop",e=>{
+      e.preventDefault();chip.classList.remove("dov");
+      const f=parseInt(e.dataTransfer.getData("text/plain")),t=parseInt(chip.dataset.i);
+      if(f!==t){[G.rework[f],G.rework[t]]=[G.rework[t],G.rework[f]];renderReorderUI();}
+    });
+    c.appendChild(chip);
+  });
+}
+
+function confirmReorder(){
+  const s=G.slot,n=G.count;
+  G.board[s].splice(G.board[s].length-n,n,...G.rework);
+  $("reorder-wrap").style.display="none";
+  setLog("🔄 "+G.players[G.cur].name+" REORDERED CREW AT "+SECTORS[s]);
+  endTurn();
+}
+
+// ── TURN END ──
+function endTurn(){
+  G.turn++;G.phase="action";G.action=null;G.count=null;G.slot=null;
+  $("btn-launch").classList.remove("on");
+  $("btn-reorder").classList.remove("on");
+  $("btn-cancel").style.display="none";
+  $("count-row").style.display="none";
+  $("reorder-wrap").style.display="none";
+  if(checkEnd()){endGame();return;}
+  G.cur=1-G.cur;renderAll();
+  if(G.mode===1&&G.cur===1){setLog("🤖 AI COMPUTING OPTIMAL TRAJECTORY…");setTimeout(doAI,CFG.AI_MS);}
+  else setLog(G.players[G.cur].name+" — LAUNCH OR REORDER?");
+}
+
+function checkEnd(){
+  if(G.turn>=CFG.TURNS)return true;
+  return G.players.some(p=>p.rescued.length>=7);
+}
+
+// ── AI ──
+function doAI(){
+  if(G.over)return;
+  let best=null,bv=-1;
+  for(let s=0;s<CFG.SLOTS-1;s++){
+    const stack=G.board[s];if(!stack.length)continue;
+    for(let n=Math.min(3,stack.length);n>=1;n--){
+      const top=stack.slice(stack.length-n);
+      const own=top.some(t=>t.owner==="p2");
+      const v=s*7+n*2+(own?14:0)+(s+1===CFG.SLOTS-1?55:0);
+      if(v>bv){bv=v;best={s,n};}
+    }
+  }
+  if(Math.random()<0.18){
+    for(let s=1;s<CFG.SLOTS-1;s++){
+      if(G.board[s].length>=2){
+        const n=Math.min(3,G.board[s].length);
+        const top=[...G.board[s].slice(G.board[s].length-n)];
+        const own=top.filter(t=>t.owner==="p2"),oth=top.filter(t=>t.owner!=="p2");
+        if(own.length&&oth.length){
+          G.slot=s;G.count=n;G.rework=[...oth,...own];
+          confirmReorder();return;
+        }
+      }
+    }
+  }
+  if(best)doLaunch(best.s,best.n,true);
+  else endTurn();
+}
+
+// ── END ──
+function endGame(){
+  G.over=true;bigConfetti();
+  const p1=G.players[0],p2=G.players[1];
+  const winner=p1.score>p2.score?p1:p2.score>p1.score?p2:null;
+  $("end-ico").textContent=winner?"🏆":"🤝";
+  $("end-ttl").textContent=winner?winner.name+" WINS!":"GALACTIC TIE!";
+  $("end-sub").textContent=winner?"⭐ UNIVERSE SAVED BY "+winner.name+"!":"BOTH COMMANDERS EQUALLY HEROIC!";
+  $("score-row").innerHTML=G.players.map(p=>`
+    <div class="sc-box ${p===winner?"w":""}">
+      <div class="sbn">${p.name}</div>
+      <div class="sbp">${p.score}</div>
+      <div class="sbd">${p.rescued.length}/7 rescued</div>
+    </div>`).join("");
+  show("screen-end");
+}
+
+// ── VFX ──
+function spawnScorePop(txt){
+  const el=document.createElement("div");el.className="spop";el.textContent=txt+" ⭐";
+  el.style.left=(20+Math.random()*60)+"%";el.style.top="38%";
+  document.body.appendChild(el);setTimeout(()=>el.remove(),1500);
+}
+
+function spawnLaser(from,to){
+  // Simple laser flash
+  const el=document.createElement("div");el.className="laser";
+  el.style.cssText=`top:50%;left:10%;width:80%;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation-duration:.5s`;
+  document.body.appendChild(el);setTimeout(()=>el.remove(),600);
+}
+
+function spawnWarpRing(){
+  const el=document.createElement("div");el.className="wring";
+  const s=80+Math.random()*60;
+  el.style.cssText=`width:${s}px;height:${s}px;left:${35+Math.random()*30}%;top:45%;margin-left:-${s/2}px;margin-top:-${s/2}px`;
+  document.body.appendChild(el);setTimeout(()=>el.remove(),900);
+}
+
+function spawnBurst(){
+  const cols=["#00e5ff","#bf00ff","#ff1493","#ffe000","#00ff88","#ff6600"];
+  for(let i=0;i<14;i++){
+    const el=document.createElement("div");el.className="prt";
+    const sz=4+Math.random()*8;
+    const angle=Math.random()*360,dist=60+Math.random()*80;
+    const dx=Math.cos(angle*Math.PI/180)*dist,dy=Math.sin(angle*Math.PI/180)*dist;
+    el.style.cssText=`width:${sz}px;height:${sz}px;background:${cols[Math.floor(Math.random()*cols.length)]};left:50%;top:45%;animation-duration:${.6+Math.random()*.5}s;--dx:${dx}px;--dy:${dy}px`;
+    el.style.animation=`prtFly ${.6+Math.random()*.5}s ease-out forwards`;
+    el.style.setProperty("--tx",dx+"px");el.style.setProperty("--ty",dy+"px");
+    // manual keyframe via JS
+    el.animate([
+      {transform:"translate(-50%,-50%) translate(0,0)",opacity:1},
+      {transform:`translate(-50%,-50%) translate(${dx}px,${dy}px)`,opacity:0}
+    ],{duration:700+Math.random()*400,easing:"ease-out",fill:"forwards"});
+    document.body.appendChild(el);setTimeout(()=>el.remove(),1200);
+  }
+}
+
+function spawnFlash(color){
+  const el=document.createElement("div");el.className="flash";
+  el.style.background=color;
+  document.body.appendChild(el);setTimeout(()=>el.remove(),550);
+}
+
+function bigConfetti(){
+  const cols=["#00e5ff","#bf00ff","#ff1493","#ffe000","#00ff88","#ff6600","#ffffff","#7700ff"];
+  for(let i=0;i<130;i++){
+    setTimeout(()=>{
+      const el=document.createElement("div");el.className="conf";
+      const w=5+Math.random()*13,h=5+Math.random()*13;
+      el.style.cssText=`left:${Math.random()*100}%;top:-30px;width:${w}px;height:${h}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?"50%":"2px"};animation-duration:${1.8+Math.random()*2.5}s;animation-delay:${Math.random()*1.5}s;transform:rotate(${Math.random()*360}deg)`;
+      document.body.appendChild(el);setTimeout(()=>el.remove(),5000);
+    },i*18);
+  }
+}
+
+// ── BUILD STAR FIELD ──
+(function buildStars(){
+  const sf=document.getElementById("stars");
+  for(let i=0;i<120;i++){
+    const el=document.createElement("div");el.className="star";
+    const sz=.5+Math.random()*2.5;
+    el.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${2+Math.random()*5}s;animation-delay:${-Math.random()*6}s`;
+    sf.appendChild(el);
+  }
+  // Add nebula clouds
+  const nb=document.getElementById("space-bg");
+  const nCols=["rgba(0,100,255,.15)","rgba(150,0,255,.12)","rgba(255,0,100,.1)","rgba(0,200,150,.08)"];
+  for(let i=0;i<4;i++){
+    const el=document.createElement("div");el.className="nebula";
+    const sz=200+Math.random()*300;
+    el.style.cssText=`width:${sz}px;height:${sz}px;background:${nCols[i]};left:${Math.random()*90}%;top:${Math.random()*90}%;animation-duration:${8+Math.random()*8}s;animation-delay:${-Math.random()*10}s`;
+    nb.appendChild(el);
+  }
+})();
+</script>
+</body>
+</html>
